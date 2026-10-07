@@ -44,3 +44,6 @@ data/
 *.tar.gz
 *.tar
 *.rar
+# outputs of our runs: distributed as a release, not in the repository
+results/
+spike_rl_input/

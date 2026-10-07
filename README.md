@@ -1,3 +1,14 @@
+> **About this copy.** This is a private working copy of
+> [sahithyaravi/SPIKE-RL](https://github.com/sahithyaravi/SPIKE-RL) at upstream
+> commit `13dcd93`, shared for analysis by the University of Brescia / ANIMI
+> team. The authors' code and history are unchanged; one optional argument and
+> a few evaluation tools were added. See [`CHANGES.md`](CHANGES.md) for every
+> change, [`RUNNING.md`](RUNNING.md) to run it, and
+> [`OUR_RESULTS.md`](OUR_RESULTS.md) for what we measured. The original README
+> follows, unchanged.
+
+---
+
 <div align="center">
 
 # SPIKE-RL: Video-LLMs meet Bayesian Surprise
