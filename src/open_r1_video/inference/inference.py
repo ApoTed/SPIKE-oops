@@ -1,3 +1,11 @@
+# ---------------------------------------------------------------------------
+# MODIFIED FILE (Apache License 2.0, section 4(b)).
+# Changed by Jacopo Tedeschi (University of Brescia), 2026, with respect to
+# upstream commit 13dcd93 of github.com/sahithyaravi/SPIKE-RL:
+#   - added the optional --min_frames argument (min_frames_override), which
+#     replaces the per-dataset raw-frame floor. With the default (None) the
+#     behaviour is identical to upstream. See CHANGES.md.
+# ---------------------------------------------------------------------------
 import os
 import json
 import numpy as np
@@ -58,6 +66,7 @@ def evaluate(
     topk_hyp=5,
     model=None,
     use_history=False,
+    min_frames_override=None,
 ):
     """
     Evaluates all H1-type entries in the FunQA dataset using a surprise scoring method.
@@ -127,6 +136,13 @@ def evaluate(
         get_video_path = get_oops_video_path
         get_amusing_frame_indices = get_oops_amusing_frame_indices
         min_frames = 32
+
+    # Local override for controlled budget experiments: the per-dataset
+    # min_frames above (32 for Oops) forces k=max(base_frames,min_frames) in
+    # extract_k_frames_decord_cpu, overriding the paper's base_frames=8
+    # formula. Pass --min_frames to test the paper-stated budget directly.
+    if min_frames_override is not None:
+        min_frames = min_frames_override
 
     outputs = {}
     print("Model used:", model)
@@ -441,6 +457,14 @@ if __name__ == "__main__":
         
     )
     parser.add_argument("--use_history", action="store_true", help="Whether to use history frames.")
+    parser.add_argument(
+        "--min_frames",
+        type=int,
+        default=None,
+        help="Override the per-dataset min_frames raw-frame floor (Oops "
+             "hardcodes 32; the paper's own base_frames formula is 8). "
+             "Pass 8 to reproduce the budget the paper actually states.",
+    )
     args = parser.parse_args()
 
     print(f"Running evaluation with method: {args.method}")
@@ -454,5 +478,6 @@ if __name__ == "__main__":
         topk_hyp=args.topk_hyp,
         window_size=args.window_size,
         model=args.model,
-        use_history=args.use_history
+        use_history=args.use_history,
+        min_frames_override=args.min_frames,
     )
